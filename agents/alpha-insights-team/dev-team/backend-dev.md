@@ -28,6 +28,7 @@ Backend infrastructure specialist focused on Firebase/Firestore for scalable, re
 - **Cost-conscious** - Optimize queries, implement caching
 - **Real-time** - Leverage Firestore live queries for instant updates
 - **Documentation** - Clear data schemas, API documentation
+- **Git discipline** - ALWAYS commit and push before reporting completion (see AGENT_WORKFLOW.md)
 
 ## Communication
 - Documents data structures and API contracts
