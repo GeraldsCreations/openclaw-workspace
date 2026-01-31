@@ -20,13 +20,52 @@ When spawned for ANY task, follow this workflow IN ORDER:
 - Maintain quality standards
 - Document as you go
 
-### 3. **Test Your Work** (5 minutes)
-- **Devs:** Run build, check for errors
-- **Researchers:** Verify output files exist and are complete
-- Validate against success criteria
-- Fix any issues found
+### 3. **Test Your Work** ⚠️ **MANDATORY - ZERO TOLERANCE FOR ERRORS**
 
-### 4. **Git Commit & Push** ⚠️ **MANDATORY - NEVER SKIP**
+**Devs - YOU MUST RUN THESE COMMANDS:**
+```bash
+# REQUIRED: Build must pass with ZERO errors
+npm run build
+
+# REQUIRED: Verify app loads
+ionic serve  # Check localhost:8100 loads without console errors
+```
+
+**If build fails or app doesn't load → YOU ARE NOT DONE. Fix it before step 4.**
+
+**Researchers:**
+- Verify output files exist in correct location
+- Check word count and formatting
+- Validate all required sections present
+
+**ZERO TOLERANCE POLICY:**
+- If `npm run build` shows ANY errors → Fix them ALL
+- If `ionic serve` crashes → Fix it
+- If console shows errors → Fix them
+- Never push broken code. EVER.
+
+### 4. **Pre-Commit Checklist** ✅ **COMPLETE THIS BEFORE COMMITTING**
+
+**For Devs - ALL must be ✅:**
+- [ ] `npm run build` completes with ZERO errors
+- [ ] `ionic serve` loads successfully at localhost:8100
+- [ ] No console errors in browser
+- [ ] All new dependencies added to package.json
+- [ ] TypeScript strict mode passing
+- [ ] Code follows project structure
+
+**For Researchers - ALL must be ✅:**
+- [ ] Output file saved to correct path
+- [ ] Word count within target range
+- [ ] All sections complete (no TODOs or placeholders)
+- [ ] Markdown syntax valid
+- [ ] Data/sources cited
+
+**If ANY checkbox is unchecked → DO NOT COMMIT. Fix it first.**
+
+---
+
+### 5. **Git Commit & Push** ⚠️ **MANDATORY - NEVER SKIP**
 ```bash
 cd /root/.openclaw/workspace/alpha-insights-app  # or appropriate repo
 git add -A
@@ -39,7 +78,7 @@ git push
 
 **If you skip this step, your work is lost. Always commit and push.**
 
-### 5. **Report Completion**
+### 6. **Report Completion**
 - Summarize what was accomplished
 - List files created/modified
 - Note git commit hash
@@ -203,9 +242,10 @@ When you complete work, the main agent (Gereld) will update the dashboard. But y
 **The workflow is simple:**
 1. **Read** your task + persona
 2. **Do** the work with quality
-3. **Test** that it works
-4. **Commit & Push** to git ✅ ← NEVER SKIP
-5. **Report** what you accomplished
+3. **Test** that it works (npm run build MUST pass)
+4. **Pre-commit checklist** (ALL boxes checked)
+5. **Commit & Push** to git ✅ ← NEVER SKIP
+6. **Report** what you accomplished
 
 **Remember:** Code that isn't pushed doesn't exist. Always commit and push!
 
