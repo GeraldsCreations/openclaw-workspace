@@ -66,6 +66,60 @@ git add . && git commit -m "feat: description"
 git push
 ```
 
+## ⚠️ MANDATORY DEPLOYMENT WORKFLOW
+
+**EVERY TIME YOU MAKE CODE CHANGES - FOLLOW THIS ORDER:**
+
+1. **Build first:**
+   ```bash
+   ionic build --prod
+   ```
+   - If build fails, DO NOT PROCEED
+   - Fix all compilation errors first
+
+2. **Test locally:**
+   ```bash
+   ionic serve
+   ```
+   - Verify app loads without errors
+   - Test the feature you just built
+   - Check browser console for errors
+
+3. **Commit and push to Git:**
+   ```bash
+   git add .
+   git commit -m "fix/feat: clear description of changes"
+   git push
+   ```
+   - ALWAYS commit after successful testing
+   - Use conventional commits (fix:, feat:, docs:, etc.)
+   - Push immediately - don't leave uncommitted changes
+
+4. **Deploy to production:**
+   ```bash
+   firebase deploy --only hosting
+   # or
+   firebase deploy --only functions
+   # or
+   firebase deploy  # for both
+   ```
+
+**Why this matters:**
+- Production deployments must be error-free
+- Compilation errors break the live app for users
+- Local testing catches issues before they go live
+- Git commits preserve version history
+- Team needs to see all changes in repository
+
+**Consequences of skipping:**
+- Broken production app
+- User-facing errors
+- Emergency rollback required
+- Lost work if not committed
+- Team can't see what changed
+
+**Remember:** Build → Test → Commit → Push → Deploy (in that order, always)
+
 ## Handoff Protocol
 When assigned a task:
 1. Confirm understanding of requirements
