@@ -7,9 +7,10 @@
 
 const axios = require('axios');
 const { loadWallet } = require('./wallet');
+const { config } = require('./config');
 
 // Configuration
-const API_URL = process.env.LAUNCHPAD_API_URL || 'http://localhost:3000/v1';
+const API_URL = config.apiUrl;
 
 const api = axios.create({
   baseURL: API_URL,
@@ -17,6 +18,8 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+console.log(`🚀 LaunchPad API: ${API_URL}`);
 
 /**
  * Create a new token

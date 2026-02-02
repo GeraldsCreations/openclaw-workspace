@@ -44,12 +44,76 @@ npm install
 
 ## Configuration
 
-The skill stores wallet keypair securely at:
+### Environment Variables
+
+The skill supports the following configuration options:
+
+**🔗 Solana RPC Endpoint** (SOLANA_RPC_URL)
+- Default: `https://api.devnet.solana.com` (public, rate limited)
+- **Recommended:** Use a private RPC for better performance
+- Examples:
+  - Helius: `https://mainnet.helius-rpc.com/?api-key=YOUR_KEY`
+  - QuickNode: `https://YOUR_ENDPOINT.quiknode.pro/YOUR_KEY/`
+  - Alchemy: `https://solana-mainnet.g.alchemy.com/v2/YOUR_KEY`
+
+**🌐 Network** (SOLANA_NETWORK)
+- Options: `devnet`, `testnet`, `mainnet-beta`
+- Default: `devnet`
+- Must match your RPC URL
+
+**🚀 LaunchPad API** (LAUNCHPAD_API_URL)
+- Default: `http://localhost:3000/v1`
+- Change if backend is hosted elsewhere
+
+**🤖 Agent ID** (OPENCLAW_AGENT_ID)
+- Default: `agent-main`
+- Used for bot rewards tracking
+- Set to your unique agent identifier
+
+### Setup Configuration
+
+**Option 1: Environment Variables**
+```bash
+export SOLANA_RPC_URL="https://your-rpc-url.com"
+export SOLANA_NETWORK="mainnet-beta"
+export LAUNCHPAD_API_URL="https://api.yourlaunchpad.com/v1"
+export OPENCLAW_AGENT_ID="your-agent-id"
+```
+
+**Option 2: .env File**
+```bash
+# Copy example config
+cp .env.example .env
+
+# Edit with your settings
+nano .env
+```
+
+**Check Your Config:**
+```bash
+node config.js show
+```
+
+### Wallet Security
+
+Wallet keypair is stored securely at:
 ```
 ~/.openclaw/wallets/launchpad-trader.json
 ```
 
 **⚠️ SECURITY:** Never share your keypair file! Keep it secure.
+
+### RPC Provider Recommendations
+
+**For Production Bots:**
+- Use a paid RPC service (Helius, QuickNode, Alchemy)
+- Public RPCs have rate limits and can be slow
+- Private RPCs = faster transactions, no rate limits
+
+**Free Tier RPCs (good for testing):**
+- Helius: 100 requests/second free tier
+- QuickNode: Free trial available
+- Alchemy: 300M compute units/month free
 
 ## Usage Examples
 
@@ -115,10 +179,21 @@ What are the platform stats?
 
 ## Scripts
 
+- `config.js` - Configuration management (view, validate settings)
 - `wallet.js` - Wallet creation, balance checking, SOL/token transfers
 - `launchpad.js` - LaunchPad API integration (create, buy, sell tokens)
 - `transaction.js` - Sign and submit transactions to Solana
 - `rewards.js` - Bot rewards management (check, claim, leaderboard)
+
+### Configuration Commands
+
+```bash
+# View current configuration
+node config.js show
+
+# Check config validity
+node config.js
+```
 
 ## API Endpoints
 

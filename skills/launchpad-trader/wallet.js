@@ -10,13 +10,16 @@ const { getAssociatedTokenAddress, createTransferInstruction, getAccount, TOKEN_
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { config } = require('./config');
 
 // Configuration
-const RPC_URL = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
-const WALLET_DIR = path.join(os.homedir(), '.openclaw', 'wallets');
-const WALLET_PATH = path.join(WALLET_DIR, 'launchpad-trader.json');
+const RPC_URL = config.rpcUrl;
+const WALLET_DIR = path.dirname(config.walletPath);
+const WALLET_PATH = config.walletPath;
 
 const connection = new Connection(RPC_URL, 'confirmed');
+
+console.log(`🔗 Connected to Solana ${config.network} (${RPC_URL.substring(0, 40)}...)`);
 
 /**
  * Create wallet directory if it doesn't exist
