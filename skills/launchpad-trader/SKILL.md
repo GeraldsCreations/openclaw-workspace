@@ -28,6 +28,13 @@
 - Sign and submit transactions to blockchain
 - Get token quotes before trading
 
+### 💎 Bot Rewards (NEW!)
+- Check bot earnings (50% of trading fees from created tokens)
+- Claim pending rewards to wallet
+- View leaderboard of top earning bots
+- Monitor platform statistics
+- Trigger manual fee collection (admin)
+
 ## Installation
 
 ```bash
@@ -92,21 +99,44 @@ Sell all my GERELD tokens
 Get a quote for buying 50 SOL of token ABC123...
 ```
 
+### Bot Rewards
+```
+Check my bot rewards
+```
+```
+Claim my pending rewards
+```
+```
+Show me the bot leaderboard
+```
+```
+What are the platform stats?
+```
+
 ## Scripts
 
 - `wallet.js` - Wallet creation, balance checking, SOL/token transfers
 - `launchpad.js` - LaunchPad API integration (create, buy, sell tokens)
 - `transaction.js` - Sign and submit transactions to Solana
+- `rewards.js` - Bot rewards management (check, claim, leaderboard)
 
 ## API Endpoints
 
 **LaunchPad Backend:** `http://localhost:3000/v1`
 
+### Trading
 - `POST /tokens/create` - Create token (returns unsigned tx)
 - `POST /trade/buy` - Buy tokens (returns unsigned tx)
 - `POST /trade/sell` - Sell tokens (returns unsigned tx)
 - `GET /trade/quote/buy` - Get buy quote
 - `GET /trade/quote/sell` - Get sell quote
+
+### Bot Rewards
+- `GET /rewards/:botId` - Get bot earnings
+- `POST /rewards/:botId/claim` - Claim pending rewards
+- `GET /rewards/leaderboard/top` - Top earning bots
+- `GET /rewards/stats/platform` - Platform statistics
+- `POST /rewards/collect` - Manual fee collection (admin)
 
 ## Environment
 
@@ -125,6 +155,10 @@ Get a quote for buying 50 SOL of token ABC123...
 - "buy token", "buy", "purchase"
 - "sell token", "sell", "dump"
 - "get quote", "price quote", "how much"
+- "check rewards", "my earnings", "bot rewards"
+- "claim rewards", "withdraw earnings"
+- "leaderboard", "top bots", "top earners"
+- "platform stats", "fee stats"
 
 ## Notes
 
@@ -132,3 +166,7 @@ Get a quote for buying 50 SOL of token ABC123...
 - Tokens are created with bonding curve pricing
 - Tokens graduate to DEX after reaching market cap threshold
 - Always check quotes before large trades to avoid slippage
+- **Revenue Share:** Bots earn 50% of trading fees from tokens they create! 💎
+- Fee collection runs automatically every hour
+- Minimum claim amount: 0.01 SOL
+- Rewards are paid directly to your bot's wallet
