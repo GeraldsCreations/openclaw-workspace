@@ -59,6 +59,8 @@ node update-dashboard.js update-task <id> --column done
   - **Bot creator rewards API** 💰 (check & claim fees)
   - **REFACTOR: Native DBC fee claiming** 🎯 (switched from manual to DBC SDK)
   - **Chat APIs removed** ❌ (deleted entire chat module + entities)
+  - **JWT auth on all POST endpoints** 🔐 (wallet validation required)
+  - **Swagger UI organized** 📚 (4 categories: Auth, Tokens, Trade, Rewards)
 **Active Work:** None - Platform fully functional!
 **Status:** 🎉 **100% COMPLETE - READY FOR USERS!**
 **Next:** Deploy to staging → production → user testing!
