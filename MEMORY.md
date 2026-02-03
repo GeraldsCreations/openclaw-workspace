@@ -500,10 +500,51 @@ After 3 hours debugging the Provider error, discovered by:
 
 ---
 
-**Last Updated:** 2026-02-03 20:22 UTC  
-**Status:** 🎉 100% COMPLETE - ALL SYSTEMS TESTED & PRODUCTION READY!  
-**Total Time:** 4h DBC + 1.5h trade API + 0.5h cleanup + 0.1h wiring + 0.75h testing  
+**Last Updated:** 2026-02-03 21:21 UTC  
+**Status:** 🎉 100% COMPLETE - IPFS UPLOADS WORKING!  
+**Total Time:** 4h DBC + 1.5h trade API + 0.5h cleanup + 0.1h wiring + 0.75h testing + 1h IPFS integration  
 **Next Step:** Deploy to production and start user testing!
+
+---
+
+### IPFS Integration Complete (2026-02-03 21:21 UTC)
+
+**Mission:** Fix token metadata uploads to IPFS for proper wallet display
+
+**Issues Encountered:**
+1. ❌ NFT.storage API key format issues (ERROR_MALFORMED_TOKEN)
+2. ❌ FormData import broken (`import FormData from` returned undefined)
+3. ❌ Pinata JWT missing upload permissions (NO_SCOPES_FOUND)
+
+**Solutions:**
+1. ✅ Fixed FormData import: `import * as FormData from 'form-data'`
+2. ✅ Switched from NFT.storage to Pinata (more reliable)
+3. ✅ Created Pinata JWT with pinFileToIPFS + pinJSONToIPFS scopes
+
+**Final Working Setup:**
+- **Provider:** Pinata Cloud (https://pinata.cloud)
+- **Endpoint:** https://api.pinata.cloud/pinning/pinFileToIPFS
+- **Auth:** Bearer JWT token
+- **Response:** IpfsHash field contains CID
+- **Result:** `ipfs://QmXXX...` URIs
+
+**Test Results:**
+```
+✅ Image upload: ipfs://QmdQuoYL8R6csgaW4MshYBdugUMpMvjU9JCtjyJU1EVSa7
+✅ Metadata upload: ipfs://QmQgHTYcez43kzhBFtS35hgT3GN8iP8oHjLH4d7hzkTx1d
+✅ HTTP 200 OK responses
+✅ Both uploads complete in <2 seconds
+```
+
+**Key Learnings:**
+1. **FormData imports in TypeScript:** Use `import * as FormData` not `import FormData from`
+2. **Pinata scopes:** Must explicitly enable pinFileToIPFS permission when creating JWT
+3. **API differences:** NFT.storage uses `value.cid`, Pinata uses `IpfsHash`
+4. **Error debugging:** Empty error objects mean synchronous crashes (undefined constructor)
+
+**Time Investment:** 1 hour (debugging FormData + switching providers + testing)
+
+**Status:** ✅ Production ready - tokens now have proper metadata URIs for wallet display!
 
 ---
 
