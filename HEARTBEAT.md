@@ -57,6 +57,7 @@ node update-dashboard.js update-task <id> --column done
   - **Indexer filtering implemented** ✅ (only tracks our platform tokens)
   - **1% BONDING CURVE FEES ENABLED** 🎉 (revenue from day 1!)
   - **Bot creator rewards API** 💰 (check & claim fees)
+  - **REFACTOR: Native DBC fee claiming** 🎯 (switched from manual to DBC SDK)
 **Active Work:** None - Platform fully functional!
 **Status:** 🎉 **100% COMPLETE - READY FOR USERS!**
 **Next:** Deploy to staging → production → user testing!
