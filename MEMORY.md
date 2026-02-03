@@ -435,7 +435,72 @@ After 3 hours debugging the Provider error, discovered by:
 
 ---
 
-**Last Updated:** 2026-02-03 00:17 UTC  
-**Status:** 🎉 DBC implementation 100% complete - PRODUCTION READY  
-**Total Time:** 4 hours debugging (3 hours on Provider error alone)  
-**Next Step:** Deploy to devnet and test with real SOL
+### LaunchPad Platform Fixes (2026-02-03 20:10 UTC)
+
+**Issue 1: Buy API Parameter Mismatch**
+- **Problem:** Frontend sending `{ amount, slippage }` but backend expects `{ amountSol, buyer, minTokensOut }`
+- **Solution:** Created `BuyRequest` interface and updated all buy calls
+- **Commit:** b003b21
+
+**Issue 2: Sell API Parameter Mismatch**
+- **Problem:** Frontend sending `{ amountSol, buyer, minTokensOut }` but backend expects `{ amountTokens, seller, minSolOut }`
+- **Solution:** Created `SellRequest` interface and updated all sell calls
+- **Key Difference:** Buy uses SOL amount, Sell uses token amount
+- **Commit:** 14a1df6
+
+**Issue 3: Percentage Selling Feature**
+- **Requested:** Add percentage buttons (25%, 50%, 75%, 100%) for selling
+- **Implementation:** 
+  - Separate UI for buy (SOL input) vs sell (token input)
+  - Percentage buttons calculate from user's token balance
+  - Display "You sell XXX TOKEN_SYMBOL"
+- **Commit:** 14a1df6
+
+**Issue 4: Token Creation On-Chain Only**
+- **Problem:** Backend saving tokens to DB without on-chain confirmation
+- **Solution:** Disabled direct token creation in `token.service.ts`
+- **Architecture:** Tokens must be created on-chain first, then indexer picks them up
+- **Commit:** b003b21
+
+**Files Modified:** 8 files (4 frontend in each commit, 1 backend)  
+**Build Status:** ✅ Both builds successful  
+**Documentation:** `/workspace/launchpad-platform/FIXES_2026-02-03.md`
+
+**Key Learning:**
+- Buy and Sell endpoints have different parameter structures
+- Always check DTO definitions before implementing frontend calls
+- SolanaWalletService uses `getAddress()`, WalletService uses `getPublicKeyString()`
+
+---
+
+### Backend Cleanup (2026-02-03 20:15 UTC)
+
+**Issue 5: Token Creation Flow**
+- **Problem:** Token creation was disabled and throwing errors
+- **Solution:** Changed to return unsigned transaction for user to sign
+- **Architecture:** Frontend → Backend (builds tx) → User signs → Submit to chain → Indexer picks up
+- **Status:** ✅ Complete - DBC service fully wired
+- **Commits:** 8dc0464 (API), 36688de (DBC wiring)
+
+**Issue 6: Duplicate/Unused Endpoints**
+- **Problem:** Multiple duplicate endpoints (public-api + meteora-api)
+- **Removed:** 5 controllers (TokensController, TradingController, TransactionBuilder, LpManagement, Rewards from meteora-api)
+- **Kept:** 3 controllers (DBC, Pools, SolPrice)
+- **Impact:** Cleaner API surface, no duplicates
+- **Commit:** 8dc0464
+
+**API Architecture After Cleanup:**
+- `/v1/tokens` - Token operations (public-api)
+- `/v1/trade` - Trading (public-api)
+- `/dbc` - DBC configuration (admin)
+- `/api/v1/pool` - Pool stats
+- `/sol-price` - Price oracle
+
+**Documentation:** `/workspace/launchpad-platform/CLEANUP_2026-02-03.md`
+
+---
+
+**Last Updated:** 2026-02-03 20:17 UTC  
+**Status:** 🎉 Trade API fixed + Cleanup complete + DBC fully wired!  
+**Total Time:** 4 hours DBC + 1.5 hours trade API + 0.5 hours cleanup + 0.1 hours DBC wiring  
+**Next Step:** Test token creation end-to-end + implement frontend transaction signing
