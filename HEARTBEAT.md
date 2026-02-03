@@ -58,6 +58,7 @@ node update-dashboard.js update-task <id> --column done
   - **1% BONDING CURVE FEES ENABLED** 🎉 (revenue from day 1!)
   - **Bot creator rewards API** 💰 (check & claim fees)
   - **REFACTOR: Native DBC fee claiming** 🎯 (switched from manual to DBC SDK)
+  - **Chat APIs removed** ❌ (deleted entire chat module + entities)
 **Active Work:** None - Platform fully functional!
 **Status:** 🎉 **100% COMPLETE - READY FOR USERS!**
 **Next:** Deploy to staging → production → user testing!
