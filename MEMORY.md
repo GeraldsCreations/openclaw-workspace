@@ -500,10 +500,10 @@ After 3 hours debugging the Provider error, discovered by:
 
 ---
 
-**Last Updated:** 2026-02-03 21:21 UTC  
-**Status:** 🎉 100% COMPLETE - IPFS UPLOADS WORKING!  
-**Total Time:** 4h DBC + 1.5h trade API + 0.5h cleanup + 0.1h wiring + 0.75h testing + 1h IPFS integration  
-**Next Step:** Deploy to production and start user testing!
+**Last Updated:** 2026-02-04 12:30 UTC  
+**Status:** 🎉 100% COMPLETE - 3 REPOS LIVE + RAILWAY-READY!  
+**Total Time:** 4h DBC + 1.5h trade API + 0.5h cleanup + 0.1h wiring + 0.75h testing + 1h IPFS + 0.25h repo split  
+**Next Step:** Deploy to Railway and start user testing!
 
 ---
 
@@ -545,6 +545,144 @@ After 3 hours debugging the Provider error, discovered by:
 **Time Investment:** 1 hour (debugging FormData + switching providers + testing)
 
 **Status:** ✅ Production ready - tokens now have proper metadata URIs for wallet display!
+
+---
+
+### Repository Split for Railway Deployment (2026-02-04 12:30 UTC)
+
+**Mission:** Split monorepo into 3 independent repos for Railway deployment
+
+**Problem:**
+- Monorepo structure made Railway deployment complex
+- Frontend and backend couldn't be deployed independently
+- Single repo = single deployment = slower CI/CD
+
+**Solution: Split into 3 Repos**
+
+1. **launchpad-frontend** (Angular 19 PWA)
+   - GitHub: https://github.com/GeraldsCreations/launchpad-frontend
+   - 129 files, 24,149 lines
+   - Railway config: `railway.json` + serve package
+   - Features: Token discovery, portfolio, watchlist, analytics, mobile PWA
+
+2. **launchpad-backend** (NestJS API)
+   - GitHub: https://github.com/GeraldsCreations/launchpad-backend
+   - 117 files, 18,440 lines
+   - Railway config: `railway.json` + migration support
+   - Features: DBC creation, trading API, rewards, WebSocket, indexer
+
+3. **launchpad-trader-skill** (OpenClaw Skill)
+   - GitHub: https://github.com/GeraldsCreations/launchpad-trader-skill
+   - 16 files, 4,290 lines
+   - No Railway (local OpenClaw skill)
+   - Features: AI trading, portfolio management, market analysis
+
+**Technical Details:**
+
+**Railway Configs Added:**
+```json
+{
+  "build": { "buildCommand": "npm ci && npm run build" },
+  "deploy": { "startCommand": "..." }
+}
+```
+
+**Frontend Deployment:**
+- Build: Angular production build
+- Serve: `serve` package for static files
+- Port: Auto-configured via `$PORT`
+
+**Backend Deployment:**
+- Build: NestJS build
+- Start: `npm run start:prod`
+- Database: PostgreSQL service in Railway
+- Migrations: `railway run npm run migration:run`
+
+**Cross-Repo Documentation:**
+- Each README links to other 2 repos
+- Consistent environment variable docs
+- Deployment guides in all READMEs
+
+**Time Investment:** 15 minutes
+- Repo setup: 5 min
+- Railway configs: 5 min
+- Documentation: 5 min
+
+**Key Learnings:**
+
+1. **Railway Expectations:**
+   - Needs `railway.json` or Nixpacks detection
+   - Requires proper build/start commands
+   - Environment variables must be documented
+
+2. **Static Site Deployment:**
+   - Angular builds to `dist/frontend/`
+   - Use `serve` package for static hosting
+   - Port must be configurable via `$PORT` env var
+
+3. **GitHub CLI (`gh`):**
+   - `gh repo create --private --source=. --push` = instant repo + push
+   - Much faster than web UI
+   - Auto-sets up remote tracking
+
+4. **Monorepo vs Multi-Repo:**
+   - Monorepo: Simpler local dev, complex deployment
+   - Multi-repo: More setup, but independent deploys
+   - Railway works better with multi-repo
+
+**Benefits Achieved:**
+
+✅ **Independent Deployment:**
+- Deploy frontend without rebuilding backend
+- Deploy backend without redeploying frontend
+- Faster CI/CD (only rebuild what changed)
+
+✅ **Railway Optimized:**
+- Each repo has proper config
+- Clear build/start commands
+- Environment variables documented
+
+✅ **Better Git History:**
+- Frontend commits stay in frontend repo
+- Backend commits stay in backend repo
+- Cleaner history per service
+
+✅ **Access Control:**
+- Can grant different permissions per repo
+- Frontend team doesn't need backend access
+- Skill can be open-sourced separately
+
+**Deployment Checklist:**
+
+1. **Backend:**
+   - [ ] Create PostgreSQL in Railway
+   - [ ] Deploy backend service
+   - [ ] Set environment variables
+   - [ ] Run migrations
+   - [ ] Note backend URL
+
+2. **Frontend:**
+   - [ ] Deploy frontend service
+   - [ ] Set `API_URL` to backend URL
+   - [ ] Set `WS_URL` to backend URL
+   - [ ] Set `SOLANA_RPC_URL`
+   - [ ] Note frontend URL
+
+3. **Backend CORS:**
+   - [ ] Add frontend URL to `CORS_ORIGINS`
+
+4. **Verify:**
+   - [ ] Frontend loads without errors
+   - [ ] API calls work
+   - [ ] WebSocket connects
+   - [ ] Wallet connection works
+
+**Files Created:**
+- `REPO_SPLIT_COMPLETE.md` - Full documentation (7.2KB)
+- 3 READMEs with deployment guides
+- 2 `railway.json` configs
+
+**Status:** ✅ All 3 repos live on GitHub and Railway-ready!
 
 ---
 
