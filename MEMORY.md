@@ -2,6 +2,40 @@
 
 ## Technical Learnings
 
+### Memory Leak Incident - Token Sync (2026-02-05)
+
+**The Crisis:**
+Backend crashed on production startup with "heap out of memory" error.
+
+**Root Cause:**
+TokenSyncService tried to load ALL 132,967 Meteora pools at once (entire Solana ecosystem), exceeding Node's 512MB default heap size.
+
+**The Fix (70 minutes):**
+1. Added conditional startup sync (only runs if `PLATFORM_LAUNCHPAD_ID` set)
+2. Implemented batch processing (50 pools per batch with GC pauses)
+3. Increased Node heap size from 512MB → 2GB
+4. Added safety limits (max 1000 pools per sync)
+5. Enhanced error handling with fail-safe behavior
+6. Fixed database config key (9M3w... → 56JeAp...)
+
+**Key Learnings:**
+1. **Always assume scale** - Test with production data volumes early
+2. **Guard critical operations** - Check prerequisites before expensive ops
+3. **Batch everything** - Never process unbounded arrays in one go
+4. **Increase heap size proactively** - Node default too small for modern apps
+5. **Env vars matter** - Missing vars should fail loudly on startup
+6. **Test cold starts** - Initial sync code easy to miss in dev
+
+**Result:**
+- ✅ Server starts reliably in 7.8 seconds
+- ✅ Memory usage <500MB (well under 2GB limit)
+- ✅ All endpoints functional
+- ✅ Production-ready
+
+**Full Report:** `memory/2026-02-05-memory-leak-incident.md`
+
+---
+
 ### Meteora DBC Bonding Curve Configuration (2026-02-02)
 
 **The Challenge:**
