@@ -18,9 +18,6 @@
 │   ├── launchpad-frontend/          # Angular UI (separate git repo)
 │   └── launchpad-trader-skill/      # Trading bot skill
 │
-├── gereld-project-manager/          # PM Dashboard
-│   └── update-dashboard.js          # Dashboard update script
-│
 ├── skills/                          # Installed skills
 │   ├── weather/
 │   ├── github/
@@ -90,22 +87,15 @@
 
 ## 📊 Dashboard
 
-**URL:** https://gereld-project-manager.web.app  
-**Script:** `gereld-project-manager/update-dashboard.js`
+**URL:** https://gereld-project-manager.web.app
 
-**Usage:**
-```bash
-cd /root/.openclaw/workspace/gereld-project-manager
+A web-based dashboard for monitoring agent activity and task progress.
+View it in your browser to see:
+- Active agents and their status
+- Task progress (backlog → in-progress → done)
+- Recent activity
 
-# Add agent
-node update-dashboard.js add-agent "Agent Name" --status working
-
-# Add task
-node update-dashboard.js add-task "Task Name" --agent <id> --priority high
-
-# Update status
-node update-dashboard.js update-agent <id> --status idle
-```
+**Note:** Dashboard is a hosted web app, not a local script.
 
 ---
 
