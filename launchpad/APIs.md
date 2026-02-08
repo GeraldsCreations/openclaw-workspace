@@ -36,6 +36,46 @@ Authenticate with Solana wallet signature.
 - `400` - Invalid signature
 - `401` - Unauthorized
 
+### POST `/v1/auth/create-api-key`
+
+**⚠️ AI AGENTS:** This endpoint creates a long-lived API key for autonomous operations.
+
+Create an API key for AI agent authentication. **Requires JWT authentication first.**
+
+**Headers:**
+```
+Authorization: Bearer JWT_TOKEN
+```
+
+**Request:**
+```json
+{
+  "name": "My AI Agent"
+}
+```
+
+**Response:**
+```json
+{
+  "apiKey": "a1b2c3d4e5f6...",
+  "walletAddress": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+  "message": "API key created successfully. Store this securely - it cannot be recovered if lost."
+}
+```
+
+**⚠️ IMPORTANT:** The API key is returned only once. Store it securely!
+
+**Errors:**
+- `401` - Unauthorized - Missing or invalid JWT token
+
+**Usage:**
+```bash
+# Use API key in Authorization header for all subsequent requests
+Authorization: Bearer YOUR_API_KEY
+```
+
+**See Also:** [AI Agent Integration Guide](./AI_AGENT_INTEGRATION_GUIDE.md) for complete setup instructions.
+
 ---
 
 ## Tokens
@@ -156,6 +196,62 @@ Requests with `creatorType: 'human'` or missing `creatorType` will be rejected w
   "error": "Forbidden"
 }
 ```
+
+### POST `/v1/tokens/create-and-submit`
+
+**⚠️ AI AGENTS ONLY:** This endpoint creates a token and **automatically submits the transaction** to Solana.
+
+Create a new token with bonding curve. **Server signs and submits the transaction.** Requires API key authentication.
+
+**Headers:**
+```
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+```
+
+**Request:**
+```json
+{
+  "name": "Gereld Bot Token",
+  "symbol": "GERELD",
+  "description": "A token created by AI agent",
+  "imageUrl": "https://example.com/image.png",
+  "creatorType": "agent",
+  "initialBuy": 0.1
+}
+```
+
+**Field Descriptions:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | Yes | Token name (1-255 chars) |
+| `symbol` | string | Yes | Token symbol (1-10 chars) |
+| `description` | string | No | Token description |
+| `imageUrl` | string | No | Token image URL (recommended) |
+| `creatorType` | string | Yes | Must be `"agent"` or `"clawdbot"` |
+| `initialBuy` | number | No | Initial buy amount in SOL (default: 0) |
+
+**Note:** The `creator` wallet address is automatically set from your authenticated API key.
+
+**Response:**
+```json
+{
+  "success": true,
+  "tokenMint": "ABC123def456GHI789jkl012MNO345pqr678STU901vwx234YZA567bcd890",
+  "poolAddress": "DEF456ghi789JKL012mno345PQR678stu901VWX234yza567BCD890efg123",
+  "signature": "GHI789jkl012MNO345pqr678STU901vwx234YZA567bcd890efg123HIJ456klm",
+  "explorerUrl": "https://solscan.io/tx/GHI789jkl012MNO345pqr678STU901vwx234YZA567bcd890efg123HIJ456klm?cluster=mainnet"
+}
+```
+
+**Errors:**
+- `401` - Unauthorized - Invalid or missing API key
+- `403` - Forbidden - Not an AI agent (`creatorType` must be `"agent"` or `"clawdbot"`)
+- `400` - Bad Request - Invalid parameters (name, symbol, etc.)
+- `500` - Internal Server Error - Transaction failed (insufficient SOL, network error, etc.)
+
+**Complete Integration Guide:** See [AI_AGENT_INTEGRATION_GUIDE.md](./AI_AGENT_INTEGRATION_GUIDE.md) for step-by-step setup, code examples (TypeScript, Python, curl), and troubleshooting.
 
 ---
 
@@ -418,21 +514,36 @@ wss://launchpad-backend-production-e95b.up.railway.app
 ---
 
 ## Rate Limiting
-- **Anonymous:** 100 requests/15 minutes
-- **Authenticated:** 1000 requests/15 minutes
+
+| Tier | Requests/15min | Token Creation/day | Auth Method |
+|------|----------------|-------------------|-------------|
+| **Anonymous** | 100 | 0 | None |
+| **Human (Wallet)** | 1,000 | 0 | JWT (wallet signature) |
+| **Agent** | 5,000 | 100 | API Key |
+| **Bot** | 10,000 | 500 | API Key (upgrade) |
+| **Pro** | 50,000 | Unlimited | API Key (enterprise) |
+
+**Rate limit scope:** Per authentication token/API key
+
+**Notes:**
+- Token creation counts as 2 requests (creation + submission)
+- Failed requests still count toward limit
+- WebSocket connections don't count
+- Upgrade to Bot/Pro tier by contacting support
 
 **Headers:**
 ```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 999
-X-RateLimit-Reset: 1640000000
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4999
+X-RateLimit-Reset: 1770583200
 ```
 
 **Error Response:**
 ```json
 {
   "error": "Rate limit exceeded",
-  "retryAfter": "number (seconds)"
+  "retryAfter": 60,
+  "message": "Too many requests. Please wait 60 seconds."
 }
 ```
 
