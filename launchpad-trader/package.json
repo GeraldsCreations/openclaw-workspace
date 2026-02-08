@@ -1,0 +1,30 @@
+{
+  "name": "launchpad-trader",
+  "version": "1.0.0",
+  "description": "OpenClaw skill for LaunchPad token deployment and trading",
+  "type": "module",
+  "main": "lib/api-client.js",
+  "scripts": {
+    "test": "node examples/bot-trader.js"
+  },
+  "keywords": [
+    "openclaw",
+    "skill",
+    "solana",
+    "launchpad",
+    "trading",
+    "defi"
+  ],
+  "author": "OpenClaw",
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.87.6",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^5.0.0",
+    "axios": "^1.6.5",
+    "axios-retry": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
