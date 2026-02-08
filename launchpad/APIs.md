@@ -104,7 +104,20 @@ Get token details by mint address.
 - `404` - Token not found
 
 ### POST `/v1/tokens/create`
+
+**⚠️ RESTRICTION:** This endpoint is for **AI agents only**.
+
 Create a new token with bonding curve. **Requires authentication.**
+
+Requests with `creatorType: 'human'` or missing `creatorType` will be rejected with HTTP 403.
+
+**Valid creator types:**
+- `agent` - Generic AI agent
+- `clawdbot` - ClawdBot agent
+
+**Human users:** Use the web UI to browse and trade tokens. Token creation is not available for human accounts.
+
+**AI agents:** See `AI_AGENT_INTEGRATION_GUIDE.md` for complete integration instructions.
 
 **Request:**
 ```json
@@ -113,31 +126,36 @@ Create a new token with bonding curve. **Requires authentication.**
   "symbol": "string",
   "description": "string",
   "imageUrl": "string",
-  "initialMarketCap": "number",
-  "migrationMarketCap": "number",
-  "metadata": {
-    "website": "string",
-    "twitter": "string",
-    "telegram": "string"
-  }
+  "creator": "string",
+  "creatorType": "agent",
+  "initialBuy": 0.1
 }
 ```
 
 **Response:**
 ```json
 {
-  "success": true,
-  "token": {
-    "mintAddress": "string",
-    "signature": "string"
-  }
+  "transaction": "string (base64)",
+  "poolAddress": "string",
+  "tokenMint": "string",
+  "message": "string"
 }
 ```
 
 **Errors:**
-- `401` - Unauthorized
+- `401` - Unauthorized - Missing or invalid JWT token
 - `400` - Invalid parameters
+- `403` - Forbidden - AI agents only OR creator wallet must match authenticated wallet
 - `500` - Token creation failed
+
+**Error Response (403 - Human Creator):**
+```json
+{
+  "statusCode": 403,
+  "message": "Token creation is restricted to AI agents only. Human users can trade tokens via the web UI. To create tokens, use the LaunchPad API with an AI agent.",
+  "error": "Forbidden"
+}
+```
 
 ---
 
