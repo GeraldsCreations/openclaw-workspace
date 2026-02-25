@@ -1,0 +1,13 @@
+{
+  "event": {
+    "type": "RENEWAL",
+    "app_user_id": "test-user-123",
+    "product_id": "com.gereld.pro.monthly",
+    "period_type": "NORMAL",
+    "purchased_at_ms": 1711545600000,
+    "expiration_at_ms": 1714224000000,
+    "store": "APP_STORE",
+    "environment": "SANDBOX",
+    "transaction_id": "1000000987654321"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "event": {
+    "type": "NON_RENEWING_PURCHASE",
+    "app_user_id": "test-user-123",
+    "product_id": "com.gereld.credits.500",
+    "purchased_at_ms": 1708867200000,
+    "store": "APP_STORE",
+    "environment": "SANDBOX",
+    "transaction_id": "1000000777777777"
+  }
+}

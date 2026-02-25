@@ -1,0 +1,10 @@
+{
+  "event": {
+    "type": "CANCELLATION",
+    "app_user_id": "test-user-123",
+    "product_id": "com.gereld.pro.monthly",
+    "expiration_at_ms": 1714224000000,
+    "store": "APP_STORE",
+    "environment": "SANDBOX"
+  }
+}
